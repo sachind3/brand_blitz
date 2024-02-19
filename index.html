@@ -13,13 +13,30 @@
     <link rel="stylesheet" href="css/app.css" />
   </head>
   <body>
+    <div id="startScreen">
+      <div class="startDialog">
+        <button type="button" id="startBtn">&nbsp;</button>
+      </div>
+    </div>
     <div id="game">
-      <div class="gameHead">
-        <div id="timeContainer">Time Left: 60 seconds</div>
-        <div id="scoreContainer">Score: 0</div>
+      <div id="timeContainer">
+        <div id="timeText" class="timeText1">30</div>
+      </div>
+      <div id="scoreContainer">
+        <div id="scoreText" class="scoreText1">0</div>
       </div>
       <div id="bucket">
         <div class="bucketContainer"></div>
+      </div>
+      <div id="floor"></div>
+    </div>
+    <div id="resultScreen">
+      <div id="resultBg">
+        <div class="resultFlex">
+          <div class="timeText2">30</div>
+          <div class="scoreText2">0</div>
+        </div>
+        <button type="button" id="restartBtn">&nbsp;</button>
       </div>
     </div>
     <script src="js/app.js"></script>
