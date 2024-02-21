@@ -8,10 +8,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+      rel="stylesheet"
+    />
+    <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/app.css?v1" />
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"
+      integrity="sha512-0bEtK0USNd96MnO4XhH8jhv3nyRF0eK87pJke6pkYf3cM0uDIhNJy9ltuzqgypoIFXw3JSuiy04tVk4AjpZdZw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link rel="stylesheet" href="css/app.css?v2" />
   </head>
   <body>
     <div id="startScreen">
@@ -27,6 +39,9 @@
         <div id="scoreText" class="scoreText1">0</div>
       </div>
       <div id="bucket">
+        <div class="rayContainer">
+          <div class="glow">+5</div>
+        </div>
         <div class="bucketContainer"></div>
       </div>
       <div id="floor"></div>
@@ -40,6 +55,19 @@
         <button type="button" id="restartBtn">&nbsp;</button>
       </div>
     </div>
-    <script src="js/app.js?v1"></script>
+    <audio controls id="clickUi">
+      <source src="sound/clickUi.ogg" type="audio/ogg" />
+      <source src="sound/clickUi.mp3" type="audio/mpeg" />
+    </audio>
+    <audio controls id="music" loop>
+      <source src="sound/music.ogg" type="audio/ogg" />
+      <source src="sound/music.mp3" type="audio/mpeg" />
+    </audio>
+
+    <audio controls id="clap">
+      <source src="sound/clap.ogg" type="audio/ogg" />
+      <source src="sound/clap.mp3" type="audio/mpeg" />
+    </audio>
+    <script src="js/app.js?v3"></script>
   </body>
 </html>

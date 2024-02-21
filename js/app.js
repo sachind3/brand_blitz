@@ -7,9 +7,20 @@ const scoreText2 = document.querySelector(".scoreText2");
 const timeText2 = document.querySelector(".timeText2");
 const startBtn = document.querySelector("#startBtn");
 const restartBtn = document.querySelector("#restartBtn");
+
+const clickUi = document.getElementById("clickUi");
+const music = document.getElementById("music");
+const clap = document.getElementById("clap");
+clickUi.pause();
+clickUi.currentTime = 0;
+music.pause();
+music.currentTime = 0;
+clap.pause();
+clap.currentTime = 0;
 let score = 0;
 let timeLeft = 30;
 let timerInterval;
+let clapPlayed = false;
 
 const brands = [
   {
@@ -137,6 +148,8 @@ const brands = [
     image: "images/logos/31.png",
   },
 ];
+var droppedIn = false;
+const dropZone = document.getElementById("drop_zone");
 
 function preloadImage(imageSrc) {
   return new Promise((resolve, reject) => {
@@ -168,35 +181,65 @@ function createBrandDiv() {
     return;
   }
   const brandContainer = document.createElement("div");
-  brandContainer.className = "brandContainer";
-  brandContainer.style.left = getRandomX() + "px";
-  brandContainer.style.bottom = "-50px";
   const randomBrand = getRandomBrand();
 
   preloadImage(randomBrand.image)
     .then((img) => {
       const brandImg = document.createElement("img");
       brandImg.src = img.src;
+      brandContainer.append(brandImg);
+      brandContainer.style.left = getRandomX() + "px";
+      game.append(brandContainer);
+      brandContainer.classList.add("brandContainer");
       brandContainer.setAttribute("data-id", randomBrand.id);
-      brandContainer.appendChild(brandImg);
-      game.appendChild(brandContainer);
-      brandContainer.addEventListener("click", () => {
-        if (game.contains(brandContainer)) {
-          score++;
-          scoreText1.textContent = `${score}`;
-          scoreText2.textContent = `${score}`;
-          const leftPos = getRandomBucketX();
-          const topPos = getRandomBucketY();
-          game.removeChild(brandContainer);
-          const clickedBrand = document.createElement("div");
-          clickedBrand.className = "clickedBrand";
-          clickedBrand.style.left = leftPos + "px";
-          clickedBrand.style.top = -topPos + "px";
-          clickedBrand.appendChild(brandImg);
-          bucketContainer.append(clickedBrand);
-        }
+
+      let _this = bucketContainer;
+
+      // brandContainer.addEventListener("click", () => {
+      //   if (game.contains(brandContainer)) {
+      //     score = score + 5;
+      //     scoreText1.textContent = `${score}`;
+      //     scoreText2.textContent = `${score}`;
+      //     const leftPos = getRandomBucketX();
+      //     const topPos = getRandomBucketY();
+      //     game.removeChild(brandContainer);
+
+      //   }
+      // });
+
+      $(".brandContainer").draggable({
+        stop: function (event, ui) {
+          //game.removeChild(brandContainer);
+        },
+      });
+      $(".bucketContainer").droppable({
+        drop: function (event, ui) {
+          if (game.contains(brandContainer)) {
+            clickUi.play();
+            let item = ui.draggable[0];
+            let childrenN = $(item).children()[0];
+            console.log(childrenN);
+            score += 5;
+            $(".scoreText1").text(score);
+            $(".scoreText2").text(score);
+            const leftPos = getRandomBucketX();
+            const topPos = getRandomBucketY();
+            const clickedBrand = document.createElement("div");
+            clickedBrand.className = "clickedBrand";
+            clickedBrand.style.left = leftPos + "px";
+            clickedBrand.style.top = -topPos + "px";
+            clickedBrand.appendChild(childrenN);
+            bucketContainer.appendChild(clickedBrand);
+            game.removeChild(brandContainer);
+            $(".rayContainer").addClass("animateGlow");
+            setTimeout(() => {
+              $(".rayContainer").removeClass("animateGlow");
+            }, 1000);
+          }
+        },
       });
       setTimeout(() => {
+        console.log(brandContainer);
         if (game.contains(brandContainer)) {
           game.removeChild(brandContainer);
         }
@@ -211,16 +254,32 @@ function updateTimer() {
   if (timeLeft == -1) {
     clearInterval(timerInterval);
     setTimeout(() => {
+      music.pause();
+      music.currentTime = 0;
       resultScreen.classList.add("show");
+
+      // Check if clap has been played
+      if (!clapPlayed) {
+        clap.play();
+        clapPlayed = true; // Set the flag to true
+      }
+
+      setTimeout(() => {
+        clap.pause();
+        clap.currentTime = 0;
+      }, 3000);
     }, 1000);
+
     return;
   }
   timeText1.textContent = `${timeLeft}`;
-  timeText2.textContent = `${timeLeft}`;
+  timeText2.textContent = `30`;
   timeLeft--;
 }
 
 function gameStart() {
+  music.play();
+
   startScreen.classList.add("hide");
   setTimeout(() => {
     setInterval(createBrandDiv, 1000);
@@ -228,9 +287,17 @@ function gameStart() {
   }, 1000);
 }
 function restartGame() {
+  clickUi.play();
   window.location.reload();
 }
 document.addEventListener("DOMContentLoaded", function () {
   startBtn.addEventListener("click", gameStart);
   restartBtn.addEventListener("click", restartGame);
 });
+
+// setTimeout(() => {
+//   music.pause();
+//   music.currentTime = 0;
+//   resultScreen.classList.add("show");
+//   clap.play();
+// }, 1000);
